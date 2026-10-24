@@ -10,8 +10,9 @@ them runs at a time (see [what the robot does](#what-the-robot-does)).
 **It is a quick, unauthenticated LAN tool, made for one case: a pad driving a robot on a network you
 trust, with as little latency as possible.** Anyone on that network who can reach the port can
 drive the robot, stand it up, sit it down and power it off — see [trust](#trust). It is not the
-way to control a robot in general: that is WebRTC, which is authenticated and encrypted, carries a
-return path, and works from outside the LAN —
+way to control a robot in general: that is WebRTC, whose media and data channels are encrypted and
+which carries a return path. Direct WebRTC signalling on the LAN is currently unauthenticated;
+authenticated access from outside the LAN is provided by the remote path described in
 [`../design/remote-webrtc.md`](../design/remote-webrtc.md).
 
 Pairing a Bluetooth pad is a different thing, and it is
@@ -372,5 +373,6 @@ is talking, its address is the only thing that keeps others out, and a source ad
 be forged: a datagram carrying the driver's address and a `seq` just ahead of theirs is taken as
 theirs. The 1000-ahead bound stops a single blind forgery from locking the driver out, not someone
 who can see the traffic. Use it on a network you
-would let into the room with the robot, and for anything beyond that use
+would let into the room with the robot. Direct LAN WebRTC does not add an authentication boundary
+today; for access beyond a trusted LAN, use the authenticated remote path described in
 [WebRTC](../design/remote-webrtc.md).
